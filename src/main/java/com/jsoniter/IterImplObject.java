@@ -8,8 +8,12 @@ class IterImplObject {
         byte c = IterImpl.nextToken(iter);
         switch (c) {
             case 'n':
-                IterImpl.skipFixedBytes(iter, 3);
-                return null;
+                if (IterImpl.readByte(iter) == 'u' &&
+                    IterImpl.readByte(iter) == 'l' &&
+                    IterImpl.readByte(iter) == 'l') {
+                    return null; 
+                }
+                throw iter.reportError("readObject", "expected 'null' but found something else");
             case '{':
                 c = IterImpl.nextToken(iter);
                 if (c == '"') {

@@ -334,9 +334,15 @@ class IterImplForStreaming {
                 iter.skipStartedAt = -1;
                 return Any.wrap(false);
             case 'n':
-                skipFixedBytes(iter, 3);
-                iter.skipStartedAt = -1;
-                return Any.wrap((Object) null);
+                if (nextToken(iter) == 'u' &&
+                    nextToken(iter) == 'l' &&
+                    nextToken(iter) == 'l') {
+                        
+                    iter.skipStartedAt = -1;
+                    return Any.wrap((Object) null);
+                } else {
+                    throw iter.reportError("readAny", "expected 'null' but found something else");
+                }
             case '[':
                 skipArray(iter);
                 copied = copySkippedBytes(iter);

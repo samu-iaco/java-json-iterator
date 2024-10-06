@@ -189,8 +189,13 @@ class IterImpl {
                 skipFixedBytes(iter, 4);
                 return Any.wrap(false);
             case 'n':
-                skipFixedBytes(iter, 3);
-                return Any.wrap((Object) null);
+                if (readByte(iter) == 'u' &&
+                    readByte(iter) == 'l' &&
+                    readByte(iter) == 'l') {
+                    return Any.wrap((Object) null);
+                } else {
+                    throw iter.reportError("readAny", "expected 'null' but found something else");
+                }
             case '[':
                 skipArray(iter);
                 return Any.lazyArray(iter.buf, start, iter.head);

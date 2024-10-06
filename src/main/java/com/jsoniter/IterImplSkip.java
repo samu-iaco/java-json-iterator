@@ -37,8 +37,13 @@ class IterImplSkip {
                 return;
             case 't':
             case 'n':
-                IterImpl.skipFixedBytes(iter, 3); // true or null
-                return;
+                if (IterImpl.readByte(iter) == 'u' &&
+                    IterImpl.readByte(iter) == 'l' &&
+                    IterImpl.readByte(iter) == 'l') {
+                    return;  
+                } else {
+                    throw iter.reportError("skip", "expected 'null' but found something else");
+                }
             case 'f':
                 IterImpl.skipFixedBytes(iter, 4); // false
                 return;
